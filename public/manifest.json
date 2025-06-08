@@ -14,12 +14,5 @@
   },
   "background": {
     "service_worker": "background.js"
-  },
-  "content_scripts": [
-    {
-      "matches": ["https://*/*", "http://*/*"],
-      "js": ["content.js"]
-    }
-  ],
-  "host_permissions": ["<all_urls>"]
+  }
 }

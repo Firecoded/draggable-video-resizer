@@ -8,7 +8,10 @@ export default function App() {
                 onClick={() => {
                     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
                         if (tabs[0]?.id) {
-                            chrome.tabs.sendMessage(tabs[0].id, { type: "PICK_VIDEO" });
+                            chrome.runtime.sendMessage({
+                                type: "INJECT_PICKER",
+                                tabId: tabs[0].id,
+                            });
                         }
                         window.close();
                     });
