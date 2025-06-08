@@ -1,6 +1,6 @@
 import { makeVideoResizable, cleanupAllWrappers } from "./util/videoResizer";
 
-// Detect URL changes in SPAs and clean up wrappers
+// --- SPA Navigation Detection ---
 let lastUrl = location.href;
 
 const urlObserver = new MutationObserver(() => {
@@ -8,12 +8,16 @@ const urlObserver = new MutationObserver(() => {
     if (currentUrl !== lastUrl) {
         lastUrl = currentUrl;
         cleanupAllWrappers();
+        exitSelectionMode();
     }
 });
 
 urlObserver.observe(document.body, { childList: true, subtree: true });
 
-// Handle messages from popup
+// --- Selection Mode Logic ---
+let escapeHandler: (e: KeyboardEvent) => void;
+let activePicker: ((e: MouseEvent) => void) | null = null;
+
 chrome.runtime.onMessage.addListener((msg) => {
     if (msg.type === "PICK_VIDEO") {
         startVideoPicker();
@@ -21,6 +25,8 @@ chrome.runtime.onMessage.addListener((msg) => {
 });
 
 function startVideoPicker() {
+    exitSelectionMode(); // in case it was already active
+
     const onClick = (e: MouseEvent) => {
         const el = e.target as HTMLElement;
         if (el.tagName === "VIDEO") {
@@ -28,9 +34,28 @@ function startVideoPicker() {
             e.stopPropagation();
             document.body.style.cursor = "";
             makeVideoResizable(el as HTMLVideoElement);
+            exitSelectionMode();
         }
     };
 
-    document.addEventListener("click", onClick, { capture: true, once: true });
     document.body.style.cursor = "crosshair";
+    document.addEventListener("click", onClick, { capture: true, once: true });
+
+    escapeHandler = (e: KeyboardEvent) => {
+        if (e.key === "Escape") {
+            exitSelectionMode();
+        }
+    };
+    document.addEventListener("keydown", escapeHandler);
+
+    activePicker = onClick;
+}
+
+function exitSelectionMode() {
+    if (activePicker) {
+        document.removeEventListener("click", activePicker, { capture: true });
+        activePicker = null;
+    }
+    document.removeEventListener("keydown", escapeHandler);
+    document.body.style.cursor = "";
 }
