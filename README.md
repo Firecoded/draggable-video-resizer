@@ -1,54 +1,82 @@
-# React + TypeScript + Vite
+# 🎥 Draggable Video Resizer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Draggable Video Resizer** is a Chrome extension that lets you resize and reposition any video on a webpage. It wraps the video in a draggable, resizable container — giving you full control over its placement without affecting the layout of the page.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🧩 Features
 
-## Expanding the ESLint configuration
+-   Click and drag any video using a custom top bar
+-   Resize from the bottom-right corner
+-   Automatically maintains page flow with a placeholder
+-   Lightweight, private, and works offline
+-   Built with React, TypeScript, Vite, and Tailwind CSS
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## 🚀 Installation (Development)
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+1. **Clone the repository:**
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+    ```bash
+    git clone https://github.com/firecoded/draggable-video-resizer.git
+    cd draggable-video-resizer
+    ```
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+2. **Install dependencies:**
+
+    ```bash
+    npm install
+    ```
+
+3. **Build the extension:**
+
+    ```bash
+    npm run build
+    ```
+
+4. **Load into Chrome:**
+
+    - Go to `chrome://extensions`
+    - Enable **Developer Mode** (top right)
+    - Click **Load unpacked**
+    - Select the `dist/` folder
+
+---
+
+## 📖 How to Use
+
+1. Navigate to a webpage with a video.
+2. Click the 🧩 extension icon and activate the tool.
+3. Click on any video on the page.
+4. Use the top bar to drag it around.
+5. Resize it freely using the bottom-right corner.
+
+> 💡 See [`instructions.html`](./instructions.html) for a visual guide.
+
+---
+
+## ⚠️ Limitations
+
+-   Not yet compatible with YouTube (due to iframe restrictions).
+-   May not work on sites with custom video frameworks.
+-   Currently resizes freely — aspect ratio lock not implemented yet.
+
+---
+
+## 📄 Usage Notice
+
+This project was built as a personal project.
+
+Feel free to explore the code and use it for learning purposes.  
+However, please do not copy, repackage, or publish this project as your own.
+
+---
+
+## 🙏 Acknowledgements
+
+This project uses:
+
+-   [Vite](https://vitejs.dev/)
+-   [React](https://react.dev/)
+-   [TypeScript](https://www.typescriptlang.org/)
