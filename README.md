@@ -1,6 +1,6 @@
 # 🎥 Draggable Video Resizer
 
-**Draggable Video Resizer** is a Chrome extension that lets you resize and reposition any video on a webpage. It wraps the video in a draggable, resizable container — giving you full control over its placement without affecting the layout of the page.
+**Draggable Video Resizer** is a Chrome extension that lets you resize and reposition any video on a webpage. It wraps the video in a draggable, resizable container, giving you full control over its placement without affecting the layout of the page.
 
 ---
 
@@ -60,7 +60,7 @@
 
 -   Not yet compatible with YouTube (due to iframe restrictions).
 -   May not work on sites with custom video frameworks.
--   Currently resizes freely — aspect ratio lock not implemented yet.
+-   Currently resizes freely, aspect ratio lock not implemented yet.
 
 ---
 
