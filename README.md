@@ -11,8 +11,7 @@
 -   Click and drag any video using a custom top bar
 -   Resize from the bottom-right corner
 -   Automatically maintains page flow with a placeholder
--   Lightweight, private, and works offline
--   Built with React, TypeScript, Vite, and Tailwind CSS
+-   Lightweight, opt-in by default
 
 ---
 
@@ -62,7 +61,6 @@
 
 -   Not yet compatible with YouTube (due to iframe restrictions).
 -   May not work on sites with custom video frameworks.
--   Currently resizes freely, aspect ratio lock not implemented yet.
 
 ---
 
