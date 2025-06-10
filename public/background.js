@@ -3,3 +3,9 @@ chrome.runtime.onMessage.addListener((msg, sender) => {
     chrome.tabs.sendMessage(sender.tab.id, { type: "PICK_VIDEO" });
   }
 });
+
+chrome.runtime.onInstalled.addListener((details) => {
+  if (details.reason === "install") {
+    chrome.tabs.create({ url: chrome.runtime.getURL("instructions.html") });
+  }
+});
