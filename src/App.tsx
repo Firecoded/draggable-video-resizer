@@ -1,33 +1,39 @@
 import "./app.css";
 
 export default function App() {
+    const sendMessage = (msg: object) => {
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            if (tabs[0]?.id) {
+                chrome.tabs.sendMessage(tabs[0].id, msg);
+            }
+            window.close();
+        });
+    };
+
     return (
         <div className="popup-container">
-            <button
-                className="primary-button"
-                onClick={() => {
-                    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-                        if (tabs[0]?.id) {
-                            chrome.runtime.sendMessage({
-                                type: "INJECT_PICKER",
-                                tabId: tabs[0].id,
-                            });
-                        }
-                        window.close();
-                    });
-                }}
-            >
-                🎯 Pick a video from this website
-            </button>
+            <h2 className="popup-title">
+                <img src="expand.png" alt="Extension Icon" className="popup-title-icon" />
+                Draggable Video Resizer
+                <button
+                    className="info-icon"
+                    onClick={() => chrome.tabs.create({ url: chrome.runtime.getURL("instructions.html") })}
+                    title="View instructions"
+                    aria-label="Instructions"
+                >
+                    <img src="info.png" alt="Info" className="info-icon-img" />
+                </button>
+            </h2>
 
-            <button
-                className="secondary-button"
-                onClick={() => {
-                    chrome.tabs.create({ url: chrome.runtime.getURL("instructions.html") });
-                }}
-            >
-                📘 Instructions
-            </button>
+            <div className="action-section">
+                <button className="primary-button" onClick={() => sendMessage({ type: "PICK_VIDEO" })}>
+                    🎯 Select a video
+                </button>
+
+                <button className="secondary-button" onClick={() => sendMessage({ type: "AUTO_RESIZE_ALL_VIDEOS" })}>
+                    📺 Select all videos
+                </button>
+            </div>
         </div>
     );
 }

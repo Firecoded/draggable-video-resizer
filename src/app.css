@@ -1,45 +1,112 @@
 body {
-    font-family: sans-serif;
+    font-family: "Segoe UI", system-ui, sans-serif;
     margin: 0;
-    background-color: #f9fafb;
+    background-color: #f3f4f6;
 }
 
 .popup-container {
-    min-width: 320px;
     padding: 16px;
+    width: 260px;
     background-color: white;
-    font-size: 14px;
+    /* border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); */
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
+}
+
+.popup-title {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 0;
+    text-align: center;
+    color: #1f2937;
+    letter-spacing: -0.2px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 6px;
+    margin-top: 0;
+}
+
+.popup-title-icon {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+    margin-bottom: 2px;
+}
+
+.action-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.info-icon {
+    background: none;
+    border: none;
+    padding: 0;
+    margin-left: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: opacity 0.2s ease;
+}
+
+.info-icon:hover {
+    opacity: 0.7;
+}
+
+.info-icon-img {
+    width: 16px;
+    height: 16px;
+    display: block;
+    object-fit: contain;
 }
 
 .primary-button {
-    background-color: #007bff;
+    background-color: #2563eb;
     color: white;
-    padding: 8px 12px;
-    border: none;
-    border-radius: 4px;
-    width: 100%;
-    cursor: pointer;
+    padding: 10px 14px;
     font-size: 14px;
+    font-weight: 500;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
 }
 
 .primary-button:hover {
-    background-color: #0056b3;
+    background-color: #1e40af;
 }
 
 .secondary-button {
-    background-color: #e4e6eb;
-    color: #333;
-    padding: 8px 12px;
-    border: none;
-    border-radius: 4px;
-    width: 100%;
-    cursor: pointer;
+    background-color: #f3f4f6;
+    color: #111827;
+    padding: 10px 14px;
     font-size: 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
 }
 
 .secondary-button:hover {
-    background-color: #d0d3d8;
+    background-color: #e5e7eb;
+}
+
+.link-button {
+    background: none;
+    border: none;
+    color: #3b82f6;
+    font-size: 13px;
+    text-align: center;
+    cursor: pointer;
+    padding: 8px 0;
+    transition: color 0.2s ease;
+}
+
+.link-button:hover {
+    color: #1d4ed8;
+    text-decoration: underline;
 }
