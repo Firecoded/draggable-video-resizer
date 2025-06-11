@@ -13,7 +13,7 @@ export default function App() {
     return (
         <div className="popup-container">
             <h2 className="popup-title">
-                <img src="expand.png" alt="Extension Icon" className="popup-title-icon" />
+                <img src="icon-128.png" alt="Extension Icon" className="popup-title-icon" />
                 Draggable Video Resizer
                 <button
                     className="info-icon"
