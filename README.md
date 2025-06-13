@@ -59,7 +59,7 @@
 
 ## ⚠️ Limitations
 
--   Not yet compatible with YouTube (due to iframe restrictions).
+-   Not yet compatible with some embedded videos/iframes.
 -   May not work on sites with custom video frameworks.
 
 ---
