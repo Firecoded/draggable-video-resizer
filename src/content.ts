@@ -33,16 +33,41 @@ chrome.runtime.onMessage.addListener((msg) => {
 });
 
 function startVideoPicker() {
-    if (activePicker) return;
+    if (activePicker) return; // already active
+
+    const revealVideoUnderCursor = (e: MouseEvent): HTMLVideoElement | null => {
+        const peeled: HTMLElement[] = [];
+        let elem = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement | null;
+
+        while (elem && !(elem instanceof HTMLVideoElement) && peeled.length < 10) {
+            // Peel this layer
+            peeled.push(elem);
+            const old = elem.style.pointerEvents;
+            elem.style.pointerEvents = "none"; // poke hole
+            // Store previous value so we can restore later
+            (elem as any).__peOld = old;
+
+            // Peek again
+            elem = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement | null;
+        }
+
+        // Restore all layers
+        for (const el of peeled) {
+            el.style.pointerEvents = (el as any).__peOld;
+            delete (el as any).__peOld;
+        }
+
+        return elem instanceof HTMLVideoElement ? elem : null;
+    };
 
     const onClick = (e: MouseEvent) => {
-        const el = e.target as HTMLElement;
-        if (el.tagName === "VIDEO") {
-            e.preventDefault();
-            e.stopPropagation();
-            makeVideoResizable(el as HTMLVideoElement);
-            exitSelectionMode();
-        }
+        const video = revealVideoUnderCursor(e);
+        if (!video) return;
+
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        makeVideoResizable(video);
+        exitSelectionMode();
     };
 
     const onEscape = (e: KeyboardEvent) => {
@@ -62,11 +87,9 @@ function exitSelectionMode() {
         document.removeEventListener("click", activePicker, { capture: true });
         activePicker = null;
     }
-
     if (escapeHandler) {
         document.removeEventListener("keydown", escapeHandler);
         escapeHandler = null;
     }
-
     document.body.style.cursor = "";
 }
