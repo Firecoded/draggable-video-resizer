@@ -3,7 +3,7 @@
   "name": "Draggable Video Resizer",
   "version": "1.2",
   "description": "Resize and drag videos on any page.",
-  "permissions": ["activeTab"],
+  "permissions": ["activeTab", "storage"],
   "action": {
     "default_popup": "index.html",
     "default_icon": {

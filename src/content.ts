@@ -18,9 +18,10 @@ urlObserver.observe(document.body, { childList: true, subtree: true });
 let activePicker: ((e: MouseEvent) => void) | null = null;
 let escapeHandler: ((e: KeyboardEvent) => void) | null = null;
 
+// Handle messages
 chrome.runtime.onMessage.addListener((msg) => {
     if (msg.type === "PICK_VIDEO") {
-        startVideoPicker();
+        startVideoPicker(msg.mode);
     }
     if (msg.type === "AUTO_RESIZE_ALL_VIDEOS") {
         document.querySelectorAll("video").forEach((video) => {
@@ -32,26 +33,22 @@ chrome.runtime.onMessage.addListener((msg) => {
     }
 });
 
-function startVideoPicker() {
-    if (activePicker) return; // already active
+// Picker logic
+function startVideoPicker(mode: "resize" | "pip" = "resize") {
+    if (activePicker) return;
 
     const revealVideoUnderCursor = (e: MouseEvent): HTMLVideoElement | null => {
         const peeled: HTMLElement[] = [];
         let elem = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement | null;
 
         while (elem && !(elem instanceof HTMLVideoElement) && peeled.length < 10) {
-            // Peel this layer
             peeled.push(elem);
             const old = elem.style.pointerEvents;
-            elem.style.pointerEvents = "none"; // poke hole
-            // Store previous value so we can restore later
+            elem.style.pointerEvents = "none";
             (elem as any).__peOld = old;
-
-            // Peek again
             elem = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement | null;
         }
 
-        // Restore all layers
         for (const el of peeled) {
             el.style.pointerEvents = (el as any).__peOld;
             delete (el as any).__peOld;
@@ -60,13 +57,23 @@ function startVideoPicker() {
         return elem instanceof HTMLVideoElement ? elem : null;
     };
 
-    const onClick = (e: MouseEvent) => {
+    const onClick = async (e: MouseEvent) => {
         const video = revealVideoUnderCursor(e);
         if (!video) return;
 
         e.preventDefault();
         e.stopImmediatePropagation();
-        makeVideoResizable(video);
+
+        if (mode === "resize") {
+            makeVideoResizable(video);
+        } else if (mode === "pip") {
+            try {
+                await video.requestPictureInPicture();
+            } catch (err) {
+                console.warn("Failed to enter PiP mode:", err);
+            }
+        }
+
         exitSelectionMode();
     };
 

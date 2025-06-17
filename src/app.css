@@ -5,11 +5,9 @@ body {
 }
 
 .popup-container {
-    padding: 16px;
+    padding: 16px 16px 8px 16px;
     width: 260px;
     background-color: white;
-    /* border-radius: 10px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); */
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -109,4 +107,87 @@ body {
 .link-button:hover {
     color: #1d4ed8;
     text-decoration: underline;
+}
+
+.gear-button {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.settings-section {
+    display: flex;
+    justify-content: end;
+    margin-top: -8px;
+}
+
+.arrow {
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 6px solid #000; /* color of triangle */
+    transition: transform 0.2s ease;
+}
+
+/* flip on the X-axis (vertical flip) */
+.arrow.down {
+    transform: scaleY(-1); /* now triangle points down */
+}
+
+.settings-block {
+    margin-top: -16px;
+}
+
+.toggle-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+    font-size: 13px;
+}
+
+/* Hide native checkbox */
+.toggle-container input[type="checkbox"] {
+    display: none;
+}
+
+/* Track + knob */
+.toggle-slider {
+    position: relative;
+    width: 36px;
+    height: 20px;
+    background-color: #ccc;
+    border-radius: 999px;
+    transition: background-color 0.2s ease;
+}
+
+.toggle-slider::before {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.2s ease;
+}
+
+/* When checked, move the knob and change color */
+.toggle-container input[type="checkbox"]:checked + .toggle-slider {
+    background-color: #007bff;
+}
+
+.toggle-container input[type="checkbox"]:checked + .toggle-slider::before {
+    transform: translateX(16px);
+}
+
+.toggle-label {
+    white-space: nowrap;
 }
