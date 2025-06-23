@@ -11,7 +11,7 @@
 -   Click and drag any video using a custom top bar
 -   Resize from the bottom-right corner
 -   Automatically maintains page flow with a placeholder
--   Picture-in-Picture feature, pop any video outside the web browser
+-   Picture-in-Picture option, pop any video outside the web browser
 -   Lightweight, opt-in by default
 
 ---
