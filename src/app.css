@@ -1,16 +1,55 @@
+:root {
+    --bg-color: #ffffff;
+    --text-color: #000000;
+    --primary-color: #2563eb;
+    --primary-hover: #1e40af;
+    --secondary-bg: #f3f4f6;
+    --secondary-hover: #e5e7eb;
+    --link-color: #3b82f6;
+    --link-hover: #1d4ed8;
+    --border-color: #e5e7eb;
+    --selector-text-color: #000;
+}
+
+.dark {
+    --bg-color: #121212;
+    --text-color: #eeeeee;
+    --primary-color: #3801b3;
+    --primary-hover: #5222d8;
+    --secondary-bg: #1e1e1e;
+    --secondary-hover: #2a2a2a;
+    --link-color: #90caf9;
+    --link-hover: #64b5f6;
+    --border-color: #333333;
+    --selector-text-color: #fff;
+}
+
+html.theme-transition * {
+    transition: none !important;
+}
+
 body {
     font-family: "Segoe UI", system-ui, sans-serif;
     margin: 0;
-    background-color: #f3f4f6;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+body,
+.popup-container,
+.primary-button,
+.secondary-button {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
 .popup-container {
     padding: 16px 16px 8px 16px;
     width: 260px;
-    background-color: white;
+    background-color: var(--bg-color);
     display: flex;
     flex-direction: column;
     gap: 16px;
+    transition: background-color 0.3s ease;
 }
 
 .popup-title {
@@ -18,13 +57,14 @@ body {
     font-weight: 600;
     margin-bottom: 0;
     text-align: center;
-    color: #1f2937;
+    color: var(--text-color);
     letter-spacing: -0.2px;
     display: flex;
     align-items: center;
     justify-content: space-around;
     gap: 6px;
     margin-top: 0;
+    transition: color 0.3s ease;
 }
 
 .popup-title-icon {
@@ -62,8 +102,21 @@ body {
     object-fit: contain;
 }
 
+/* Default: no filter */
+.popup-title-icon,
+.info-icon-img {
+    filter: none;
+    transition: filter 0.2s ease;
+}
+
+/* In dark mode: invert icons */
+.dark .popup-title-icon,
+.dark .info-icon-img {
+    filter: invert(1);
+}
+
 .primary-button {
-    background-color: #2563eb;
+    background-color: var(--primary-color);
     color: white;
     padding: 10px 14px;
     font-size: 14px;
@@ -72,31 +125,38 @@ body {
     border-radius: 6px;
     cursor: pointer;
     transition: background-color 0.2s ease;
+    border: 1px solid transparent;
 }
 
 .primary-button:hover {
-    background-color: #1e40af;
+    background-color: var(--primary-hover);
 }
 
 .secondary-button {
-    background-color: #f3f4f6;
-    color: #111827;
+    background-color: var(--secondary-bg);
+    color: var(--text-color);
     padding: 10px 14px;
     font-size: 14px;
-    border: 1px solid #e5e7eb;
+    border: 1px solid var(--border-color);
     border-radius: 6px;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    border: 1px solid transparent;
 }
 
 .secondary-button:hover {
-    background-color: #e5e7eb;
+    background-color: var(--secondary-hover);
+}
+
+.dark .primary-button,
+.dark .secondary-button {
+    border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .link-button {
     background: none;
     border: none;
-    color: #3b82f6;
+    color: var(--link-color);
     font-size: 13px;
     text-align: center;
     cursor: pointer;
@@ -105,7 +165,7 @@ body {
 }
 
 .link-button:hover {
-    color: #1d4ed8;
+    color: var(--link-hover);
     text-decoration: underline;
 }
 
@@ -130,17 +190,86 @@ body {
     height: 0;
     border-left: 4px solid transparent;
     border-right: 4px solid transparent;
-    border-top: 6px solid #000; /* color of triangle */
+    border-top: 6px solid var(--text-color);
     transition: transform 0.2s ease;
 }
 
-/* flip on the X-axis (vertical flip) */
 .arrow.down {
-    transform: scaleY(-1); /* now triangle points down */
+    transform: scaleY(-1);
 }
 
 .settings-block {
     margin-top: -16px;
+}
+
+/* Theme toggle switch */
+.theme-switch {
+    position: relative;
+    height: 28px;
+    width: 100%;
+    display: flex;
+    background: transparent;
+    border-radius: 32px;
+    overflow: hidden;
+    border: 1px solid var(--border-color, #ccc);
+    display: flex;
+    align-items: center;
+}
+
+.switch-label {
+    font-weight: bold;
+    z-index: 2;
+    flex: 1;
+    line-height: 32px;
+    font-size: 12px;
+    color: #676a6c;
+    text-align: center;
+    cursor: pointer;
+    background: transparent;
+}
+
+.switch-input {
+    display: none;
+}
+
+.switch-input:checked + .switch-label {
+    transition: 0.15s ease-out;
+}
+
+.switch-input:checked + .switch-label {
+    color: var(--selector-text-color);
+}
+
+.switch-input:checked + .switch-label-light ~ .switch-selector {
+    transform: translateX(0%);
+    background-color: #e2e8f0;
+}
+
+.switch-input:checked + .switch-label-system ~ .switch-selector {
+    transform: translateX(100%);
+    background-color: #94a3b8; /* System */
+}
+
+.switch-input:checked + .switch-label-dark ~ .switch-selector {
+    transform: translateX(200%);
+    background-color: #6b7280; /* Dark */
+}
+
+.dark .switch-label-system,
+.dark .switch-label-light {
+    color: #fff;
+}
+
+.switch-selector {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: calc(100% / 3);
+    height: 100%;
+    border-radius: inherit;
+    background-color: var(--primary-color, #2563eb);
+    transition: all 0.3s ease;
 }
 
 .toggle-container {
@@ -152,12 +281,10 @@ body {
     font-size: 13px;
 }
 
-/* Hide native checkbox */
 .toggle-container input[type="checkbox"] {
     display: none;
 }
 
-/* Track + knob */
 .toggle-slider {
     position: relative;
     width: 36px;
@@ -179,7 +306,6 @@ body {
     transition: transform 0.2s ease;
 }
 
-/* When checked, move the knob and change color */
 .toggle-container input[type="checkbox"]:checked + .toggle-slider {
     background-color: #007bff;
 }
@@ -188,6 +314,20 @@ body {
     transform: translateX(16px);
 }
 
+/* Dark mode overrides */
+.dark .toggle-slider {
+    background-color: #444; /* Darker background */
+}
+
+.dark .toggle-container input[type="checkbox"]:checked + .toggle-slider {
+    background-color: #3b82f6; /* Blue or vibrant accent for dark mode */
+}
+
+.dark .toggle-slider::before {
+    background-color: #fff; /* Keep the knob bright for contrast */
+}
+
 .toggle-label {
+    margin: 6px 0;
     white-space: nowrap;
 }
