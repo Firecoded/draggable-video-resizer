@@ -1,18 +1,52 @@
 const Z_INDEX = 2147483646;
 const processedVideos = new WeakSet<HTMLVideoElement>();
 
+interface themeColors {
+    dragBarBg: string;
+    dragBarColor: string;
+    controlsBg: string;
+    controlsColor: string;
+    borderColor: string;
+}
+
 export function makeVideoResizable(video: HTMLVideoElement) {
     if (processedVideos.has(video)) return;
     processedVideos.add(video);
     const rect = video.getBoundingClientRect();
 
+    chrome.storage.sync.get("theme", (res) => {
+        const theme = res.theme || "system";
+        buildUI(video, rect, theme);
+    });
+}
+
+function buildUI(video: HTMLVideoElement, rect: DOMRect, theme: "light" | "dark" | "system" = "system") {
     const placeholder = createPlaceholder(video, rect);
     const outerWrapper = createOuterWrapper(rect);
 
-    const dragBar = createDragBar(outerWrapper);
-    const closeBtn = createCloseButton(video, placeholder, outerWrapper);
-    dragBar.appendChild(closeBtn);
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const isDark = theme === "dark" || (theme === "system" && prefersDark);
+    let themeColors = {
+        dragBarBg: "#f1f1f1",
+        dragBarColor: "#000000",
+        controlsBg: "#ffffff",
+        controlsColor: "#000000",
+        borderColor: "#d1d5db",
+    };
 
+    if (isDark) {
+        themeColors = {
+            dragBarBg: "#1f2937",
+            dragBarColor: "#f3f4f6",
+            controlsBg: "#111827",
+            controlsColor: "#e5e7eb",
+            borderColor: "#374151",
+        };
+    }
+
+    const dragBar = createDragBar(outerWrapper, themeColors);
+    const closeBtn = createCloseButton(video, placeholder, outerWrapper, themeColors);
+    dragBar.appendChild(closeBtn);
     // Wrapper for just the video (resizable area)
     const videoWrapper = createVideoWrapper(rect, outerWrapper);
 
@@ -24,7 +58,7 @@ export function makeVideoResizable(video: HTMLVideoElement) {
     videoWrapper.appendChild(video);
 
     // Controls container (below the video)
-    createVideoControls(video, outerWrapper);
+    createVideoControls(video, outerWrapper, themeColors);
 
     // === DRAG LOGIC (make outerWrapper draggable) ===
     let isDragging = false;
@@ -95,7 +129,7 @@ function createOuterWrapper(rect: DOMRect): HTMLDivElement {
     return outerWrapper;
 }
 
-function createDragBar(outerWrapper: HTMLDivElement): HTMLDivElement {
+function createDragBar(outerWrapper: HTMLDivElement, themeColors: themeColors): HTMLDivElement {
     const dragHandleIcon = `
     <svg width="16" height="16" viewBox="0 0 32 32" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
     <rect x="10" y="6" width="4" height="4"/>
@@ -109,7 +143,6 @@ function createDragBar(outerWrapper: HTMLDivElement): HTMLDivElement {
     const dragBar = document.createElement("div");
     Object.assign(dragBar.style, {
         height: "20px",
-        background: "#f1f1f1",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
@@ -118,13 +151,15 @@ function createDragBar(outerWrapper: HTMLDivElement): HTMLDivElement {
         borderTopRightRadius: "6px",
         userSelect: "none",
         cursor: "move",
+        background: themeColors.dragBarBg,
+        color: themeColors.dragBarColor,
     });
 
     // Add drag icon to the left
     const dragIcon = document.createElement("div");
     dragIcon.innerHTML = dragHandleIcon;
     Object.assign(dragIcon.style, {
-        color: "#555",
+        color: themeColors.dragBarColor,
         display: "flex",
         alignItems: "center",
     });
@@ -138,12 +173,13 @@ function createDragBar(outerWrapper: HTMLDivElement): HTMLDivElement {
 function createCloseButton(
     video: HTMLVideoElement,
     placeholder: HTMLDivElement,
-    outerWrapper: HTMLDivElement
+    outerWrapper: HTMLDivElement,
+    themeColors: themeColors
 ): HTMLButtonElement {
     const closeBtn = document.createElement("button");
 
     const closeIcon = `
-    <svg width="16" height="16" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+    <svg width="16" height="16" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
         <path fill="currentColor" d="M195.2 195.2a64 64 0 0 1 90.496 0L512 421.504 738.304 195.2a64 64 0 0 1 90.496 90.496L602.496 512 828.8 738.304a64 64 0 0 1-90.496 90.496L512 602.496 285.696 828.8a64 64 0 0 1-90.496-90.496L421.504 512 195.2 285.696a64 64 0 0 1 0-90.496z"/>
     </svg>`;
     closeBtn.innerHTML = closeIcon;
@@ -155,7 +191,7 @@ function createCloseButton(
         background: "none",
         border: "none",
         outline: "none",
-        color: "#000",
+        color: themeColors.dragBarColor,
         fontSize: "12px",
         cursor: "pointer",
         padding: "0",
@@ -192,7 +228,7 @@ function createCloseButton(
         closeBtn.style.color = "red";
     };
     closeBtn.onmouseleave = () => {
-        closeBtn.style.color = "#000";
+        closeBtn.style.color = themeColors.dragBarColor;
     };
 
     return closeBtn;
@@ -214,12 +250,13 @@ function createVideoWrapper(rect: DOMRect, outerWrapper: HTMLDivElement) {
     return videoWrapper;
 }
 
-function createVideoControls(video: HTMLVideoElement, outerWrapper: HTMLDivElement) {
+function createVideoControls(video: HTMLVideoElement, outerWrapper: HTMLDivElement, themeColors: themeColors) {
     // controls container
     const controls = document.createElement("div");
 
     Object.assign(controls.style, {
-        background: "#f1f1f1",
+        background: themeColors.controlsBg,
+        color: themeColors.controlsColor,
         padding: "6px",
         display: "flex",
         gap: "8px",
@@ -228,6 +265,7 @@ function createVideoControls(video: HTMLVideoElement, outerWrapper: HTMLDivEleme
         boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
         fontSize: "14px",
         cursor: "default",
+        border: `1px solid ${themeColors.borderColor}`,
     });
 
     outerWrapper.appendChild(controls);
@@ -237,8 +275,8 @@ function createVideoControls(video: HTMLVideoElement, outerWrapper: HTMLDivEleme
 
     const svgPlay = `
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="12" cy="12" r="10" stroke="#1C274C" stroke-width="1.5"/>
-    <path d="M15.4137 10.941C16.1954 11.4026 16.1954 12.5974 15.4137 13.059L10.6935 15.8458C9.93371 16.2944 9 15.7105 9 14.7868V9.21316C9 8.28947 9.93371 7.70561 10.6935 8.15419L15.4137 10.941Z" stroke="#1C274C" stroke-width="1.5"/>
+    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
+    <path d="M10 8.5L15 12L10 15.5V8.5Z" fill="currentColor"/>
     </svg>
     `;
 
@@ -272,6 +310,7 @@ function createVideoControls(video: HTMLVideoElement, outerWrapper: HTMLDivEleme
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        color: themeColors.controlsColor,
     });
 
     // Keep icon in sync
@@ -298,21 +337,19 @@ function createVideoControls(video: HTMLVideoElement, outerWrapper: HTMLDivEleme
 
     // Volume/mute toggle button
     const svgVolume = `
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M20 6C20 6 21.5 7.8 21.5 12C21.5 16.2 20 18 20 18" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
-    <path d="M18 9C18 9 18.5 9.9 18.5 12C18.5 14.1 18 15 18 15" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
-    <path d="M1.95863 8.57679C2.24482 8.04563 2.79239 7.53042 3.33997 7.27707C3.9393 6.99979 4.62626 6.99979 6.00018 6.99979C6.51225 6.99979 6.76828 6.99979 7.01629 6.95791C7.26147 6.9165 7.50056 6.84478 7.72804 6.74438C7.95815 6.64283 8.1719 6.50189 8.59941 6.22002L8.81835 6.07566C11.3613 4.39898 12.6328 3.56063 13.7001 3.92487C13.9048 3.9947 14.1029 4.09551 14.2798 4.21984C15.2025 4.86829 15.2726 6.37699 15.4128 9.3944C15.4647 10.5117 15.5001 11.4679 15.5001 11.9998C15.5001 12.5317 15.4647 13.4879 15.4128 14.6052C15.2726 17.6226 15.2025 19.1313 14.2798 19.7797C14.1029 19.9041 13.9048 20.0049 13.7001 20.0747C12.6328 20.4389 11.3613 19.6006 8.81834 17.9239L8.59941 17.7796C8.1719 17.4977 7.95815 17.3567 7.72804 17.2552C7.50056 17.1548 7.26147 17.0831 7.01629 17.0417C6.76828 16.9998 6.51225 16.9998 6.00018 16.9998C4.62626 16.9998 3.9393 16.9998 3.33997 16.7225C2.79239 16.4692 2.24482 15.9539 1.95863 15.4228C1.6454 14.8414 1.60856 14.237 1.53488 13.0282C1.52396 12.849 1.51525 12.6722 1.50928 12.4998" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polygon points="5 9 9 9 13 5 13 19 9 15 5 15 5 9"></polygon>
+    <path d="M16 8.82a4 4 0 0 1 0 6.36"></path>
+    <path d="M19 5a9 9 0 0 1 0 14"></path>
     </svg>
     `;
 
     const svgMuted = `
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M15.5001 11.9998C15.5001 12.5317 15.4647 13.4879 15.4128 14.6052C15.2726 17.6226 15.2025 19.1313 14.2798 19.7797C14.1029 19.9041 13.9048 20.0049 13.7001 20.0747C12.7327 20.4048 11.5976 19.747 9.50009 18.3725M7.01629 17.0417C6.76828 16.9998 6.51225 16.9998 6.00018 16.9998C4.62626 16.9998 3.9393 16.9998 3.33997 16.7225C2.79239 16.4692 2.24482 15.9539 1.95863 15.4228C1.6454 14.8414 1.60856 14.237 1.53488 13.0282C1.52396 12.849 1.51525 12.6722 1.50928 12.4998M1.95863 8.57679C2.24482 8.04563 2.79239 7.53042 3.33997 7.27707C3.9393 6.99979 4.62626 6.99979 6.00018 6.99979C6.51225 6.99979 6.76828 6.99979 7.01629 6.95791C7.26147 6.9165 7.50056 6.84478 7.72804 6.74438C7.95815 6.64283 8.1719 6.50189 8.59941 6.22002L8.81835 6.07566C11.3613 4.39898 12.6328 3.56063 13.7001 3.92487C13.9048 3.9947 14.1029 4.09551 14.2798 4.21984C15.1151 4.80685 15.2517 6.09882 15.3741 8.57679" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
-    <path d="M20 18C20 18 21.5 16.2 21.5 12C21.5 9.56658 20.9965 7.93882 20.5729 7" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
-    <path d="M18 15C18 15 18.5 14.1 18.5 12C18.5 11.1381 18.4158 10.4784 18.3165 10" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
-    <path d="M22 2L2 22" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polygon points="5 9 9 9 13 5 13 19 9 15 5 15 5 9"></polygon>
+    <line x1="23" y1="1" x2="1" y2="23"></line>
     </svg>
-`;
+    `;
     const volumeIcon = document.createElement("button");
     volumeIcon.innerHTML = video.muted || video.volume === 0 ? svgMuted : svgVolume;
     Object.assign(volumeIcon.style, {
@@ -320,7 +357,7 @@ function createVideoControls(video: HTMLVideoElement, outerWrapper: HTMLDivEleme
         border: "none",
         cursor: "pointer",
         fontSize: "16px",
-        color: "#333",
+        color: themeColors.controlsColor,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -338,12 +375,13 @@ function createVideoControls(video: HTMLVideoElement, outerWrapper: HTMLDivEleme
     const sliderContainer = document.createElement("div");
     Object.assign(sliderContainer.style, {
         position: "absolute",
-        bottom: "36px", // higher
+        bottom: "36px",
         left: "50%",
         transform: "translateX(-50%)",
         display: "none",
         padding: "4px",
         zIndex: "999",
+        pointerEvents: "auto",
     });
 
     // Volume slider
@@ -357,23 +395,24 @@ function createVideoControls(video: HTMLVideoElement, outerWrapper: HTMLDivEleme
         transform: "rotate(-90deg)",
         height: "80px",
         cursor: "pointer",
+        background: themeColors.controlsBg,
+        pointerEvents: "auto",
     });
 
     // Update volume
     verticalSlider.oninput = () => {
         const vol = parseFloat(verticalSlider.value);
         video.volume = vol;
-
         if (video.muted && vol > 0) {
             video.muted = false;
         }
-
         if (vol === 0) {
             video.muted = true;
         }
-
         volumeIcon.innerHTML = video.muted ? svgMuted : svgVolume;
     };
+    verticalSlider.addEventListener("mousedown", (e) => e.stopPropagation());
+    verticalSlider.addEventListener("pointerdown", (e) => e.stopPropagation());
 
     sliderContainer.appendChild(verticalSlider);
     volumeWrapper.appendChild(sliderContainer);
@@ -429,7 +468,7 @@ function createVideoControls(video: HTMLVideoElement, outerWrapper: HTMLDivEleme
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        color: video.loop ? "#007bff" : "#666", // style controls icon fill
+        color: video.loop ? "#3b82f6" : themeColors.controlsColor,
         transition: "color 0.2s ease",
     });
 
