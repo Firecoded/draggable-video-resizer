@@ -38,7 +38,7 @@ export default function App() {
                     title="View instructions"
                     aria-label="Instructions"
                 >
-                    <img src="info.png" alt="Info" className="info-icon-img" />
+                    <img src="assets/info.png" alt="Info" className="info-icon-img" />
                 </button>
             </h2>
 
