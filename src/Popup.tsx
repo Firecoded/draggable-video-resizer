@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
-import "./app.css";
+import "./popup.css";
 
-export default function App() {
+export default function Popup() {
     const [pipMode, setPipMode] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
     const [theme, setThemeState] = useState(localStorage.getItem("theme") || "system");
 
     useEffect(() => {
+        // get local storage type items on mount
         chrome.storage.sync.get(["pipMode", "showSettings", "theme"], (res) => {
             setPipMode(!!res.pipMode);
             setShowSettings(!!res.showSettings);
@@ -18,6 +19,8 @@ export default function App() {
     }, []);
 
     useEffect(() => {
+        // listen for system theme preference, if user has theme = system then change as needed
+        // on mac, users can have theme change depending on time of day, this listens for that
         const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
         const listener = () => {
@@ -42,7 +45,7 @@ export default function App() {
         }
     }
 
-    function setTheme(mode: "light" | "dark" | "system") {
+    function handleSetTheme(mode: "light" | "dark" | "system") {
         document.documentElement.classList.remove("theme-transition");
         setThemeState(mode);
         chrome.storage.sync.set({ theme: mode });
@@ -121,7 +124,7 @@ export default function App() {
                             value="light"
                             className="switch-input"
                             checked={theme === "light"}
-                            onChange={() => setTheme("light")}
+                            onChange={() => handleSetTheme("light")}
                         />
                         <label htmlFor="theme-light" className="switch-label switch-label-light">
                             Light
@@ -134,7 +137,7 @@ export default function App() {
                             value="system"
                             className="switch-input"
                             checked={theme === "system"}
-                            onChange={() => setTheme("system")}
+                            onChange={() => handleSetTheme("system")}
                         />
                         <label htmlFor="theme-system" className="switch-label switch-label-system">
                             System
@@ -147,7 +150,7 @@ export default function App() {
                             value="dark"
                             className="switch-input"
                             checked={theme === "dark"}
-                            onChange={() => setTheme("dark")}
+                            onChange={() => handleSetTheme("dark")}
                         />
                         <label htmlFor="theme-dark" className="switch-label switch-label-dark">
                             Dark

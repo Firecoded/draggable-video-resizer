@@ -24,7 +24,7 @@
     --selector-text-color: #fff;
 }
 
-html.theme-transition * {
+html.theme-transition *:not(.arrow) {
     transition: none !important;
 }
 
