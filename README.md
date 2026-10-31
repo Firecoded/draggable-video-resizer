@@ -1,18 +1,18 @@
-# 🎥 Draggable Video Resizer
+# 🎥 Draggable Video Pop Out
 
 [![Available in the Chrome Web Store](https://img.shields.io/badge/Chrome%20Web%20Store-Available-brightgreen?logo=google-chrome)](https://chromewebstore.google.com/detail/draggable-video-resizer/elfibhkehlekegpggjaanbbjnnnnbdni)
 
-**Draggable Video Resizer** is a Chrome extension that lets you resize and reposition any video on a webpage. It wraps the video in a draggable, resizable container, giving you full control over its placement without affecting the layout of the page.
+**Draggable Video Pop Out** is a Chrome extension that pops any video out into a floating, resizable player that stays put while you scroll, with picture in picture in one click.
 
 ---
 
 ## 🧩 Features
 
--   Click and drag any video using a custom top bar
--   Resize from the bottom-right corner
--   Automatically maintains page flow with a placeholder
--   Picture-in-Picture option, pop any video outside the web browser
--   Lightweight, opt-in by default
+-   Hover toolbar on every video: pop out, picture-in-picture, download
+-   Floating window that stays put while you scroll and resizes from any edge
+-   Works on YouTube, Vimeo and other iframe embeds without reloading them
+-   Keyboard shortcut and right-click menu
+-   Light, dark and system themes
 
 ---
 
@@ -31,37 +31,40 @@
     npm install
     ```
 
-3. **Build the extension:**
+3. **Start the dev watcher:**
 
     ```bash
-    npm run build
+    npm run dev
     ```
 
-4. **Load into Chrome:**
+4. **Load into Chrome (first time only):**
 
     - Go to `chrome://extensions`
     - Enable **Developer Mode** (top right)
-    - Click **Load unpacked**
-    - Select the `dist/` folder
+    - Click **Load unpacked** and select the `dist/` folder (the dev script copies its path to your clipboard; press Cmd+Shift+G in the file picker to paste it)
+
+    From then on, saving a file rebuilds and reloads the extension. Refresh the page you are testing on to pick up content script changes.
+
+5. **Release build:** `npm run build` for a production `dist/`, or `npm run zip` for the Chrome Web Store upload. Run either after stopping `npm run dev`, since they share `dist/`.
 
 ---
 
 ## 📖 How to Use
 
-1. Navigate to a webpage with a video.
-2. Click the 🧩 extension icon and activate the tool.
-3. Click on any video on the page.
-4. Use the top bar to drag it around.
-5. Resize it freely using the bottom-right corner.
+1. Hover any video (including YouTube and other embeds) and click **Pop out** in the toolbar that appears.
+2. Drag the floating window anywhere and resize it from any edge or corner. Hold Shift to resize freely.
+3. Close the window to put the video back.
 
-> 💡 See [`instructions.html`](./instructions.html) for a visual guide.
+Also: **Alt+Shift+V** pops out the video under the cursor, right-click offers **Pop out video**, and the extension menu has "Pop out all videos" plus settings.
+
+> 💡 See [`instructions.html`](./public/instructions.html) for the full guide.
 
 ---
 
 ## ⚠️ Limitations
 
--   Not yet compatible with some embedded videos/iframes.
--   May not work on sites with custom video frameworks.
+-   Embeds only get drag, resize and fullscreen, since the extension can't reach inside another site's player.
+-   Download only works for regular video files, not streaming sites, and is disabled on YouTube.
 
 ---
 

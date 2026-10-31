@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/png" href="icon-128.png" />
-  <title>Video Resizer Extension – Instructions</title>
+  <title>Draggable Video Pop Out: Guide</title>
   <style>
     body {
       font-family: sans-serif;
@@ -42,6 +42,221 @@
       border-radius: 4px;
     }
 
+    .lead {
+      text-align: center;
+      font-size: 18px;
+      margin: 0 0 24px;
+    }
+
+    .demo {
+      display: block;
+      width: 100%;
+      max-width: 960px;
+      margin: 0 auto 32px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    .step-clip {
+      display: block;
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    .shortcut {
+      margin: 0 0 16px;
+    }
+
+    .ways-mocks {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .ways-mocks figure {
+      display: flex;
+      flex-direction: column;
+      margin: 0;
+    }
+
+    .ways-mocks figcaption {
+      margin-top: 8px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .ctx-mock,
+    .ext-mock {
+      flex: 1;
+      box-sizing: border-box;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 13px;
+    }
+
+    .ways-mocks img {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      margin: 0;
+      border: 0;
+      border-radius: 0;
+      vertical-align: -2px;
+    }
+
+    .ctx-mock {
+      padding: 6px 0;
+      color: #555;
+    }
+
+    .ctx-mock > div {
+      padding: 5px 12px;
+    }
+
+    .ctx-mock > .ctx-sep {
+      padding: 0;
+      margin: 4px 0;
+      border-top: 1px solid #e5e5e5;
+    }
+
+    .ctx-mock > .ctx-active {
+      background: #dbeafe;
+      color: #1d4ed8;
+      font-weight: 600;
+    }
+
+    .ext-mock {
+      padding: 12px;
+    }
+
+    .ext-mock-title {
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 10px;
+    }
+
+    .ext-mock-button {
+      padding: 8px;
+      text-align: center;
+      color: #fff;
+      font-weight: 500;
+      background: #2563eb;
+      border-radius: 6px;
+      margin-bottom: 12px;
+    }
+
+    .ext-mock-line {
+      height: 8px;
+      background: #eee;
+      border-radius: 4px;
+      margin-bottom: 8px;
+    }
+
+    .ext-mock-line.short {
+      width: 60%;
+    }
+
+    .pin-mock {
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+
+    .pin-mock-title {
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .pin-mock-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .pin-mock-row img {
+      width: 20px;
+      height: 20px;
+      margin: 0;
+      border: 0;
+      border-radius: 0;
+    }
+
+    .pin-mock-name {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .pin-mock-pin {
+      display: flex;
+      padding: 6px;
+      border-radius: 6px;
+      background: #dbeafe;
+      color: #1d4ed8;
+    }
+
+    .side-shots {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 12px 0;
+    }
+
+    .side-shots figure {
+      margin: 0;
+    }
+
+    .side-shots img {
+      width: 100%;
+      margin: 0;
+    }
+
+    .side-shots figcaption {
+      margin-top: 6px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .legend {
+      list-style: none;
+      padding: 0;
+    }
+
+    .legend li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 10px 0;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      width: 34px;
+      height: 28px;
+      border-radius: 999px;
+      background: rgba(17, 17, 17, 0.85);
+      color: #f5f5f5;
+    }
+
+    kbd {
+      font-family: inherit;
+      font-size: 13px;
+      padding: 1px 6px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background: #fff;
+    }
+
     .grid-container {
       display: grid;
       gap: 32px;
@@ -62,47 +277,89 @@
 </head>
 <body>
   <div id="install-message"></div>
-  <h1>How to Use Draggable Video Resizer</h1>
+  <h1>How to use Draggable Video Pop Out</h1>
+  <p class="lead">Hover any video, pop it out, and keep watching while you scroll.</p>
+
+  <video class="demo" src="assets/demo.webm" data-start="1.2" autoplay muted playsinline></video>
 
   <div class="grid-container">
     <section class="step">
-      <h2>📌 Step 1: Pin the Extension</h2>
-      <p>
-        After installing the extension, click the puzzle icon (<strong>🧩</strong>) near the top-right of your browser. Then pin “Draggable Video Resizer” so it’s always visible.
-      </p>
-      <img src="assets/pin-ext.gif" alt="How to pin the extension" />
+      <h2>1. Hover any video</h2>
+      <p>Buttons appear in the video's top corner. They fade when your mouse rests.</p>
+      <div class="side-shots">
+        <figure>
+          <img src="assets/toolbar-right.jpg" alt="Toolbar in the video's top right corner" />
+          <figcaption>Top right (default)</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/toolbar-left.jpg" alt="Toolbar in the video's top left corner" />
+          <figcaption>Top left</figcaption>
+        </figure>
+      </div>
+      <p>Pick a side in the extension menu.</p>
+      <ul class="legend">
+        <li><span class="chip"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6"/><path d="M20 4l-8 8"/><path d="M18 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4"/></svg></span> <span><strong>Pop out</strong> into a floating window, right where the video was</span></li>
+        <li><span class="chip"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="4.5" width="19" height="15" rx="2"/><rect x="12" y="11.5" width="7" height="5.5" rx="1" fill="currentColor" stroke="none"/></svg></span> <span><strong>Picture in picture</strong>, Chrome's always-on-top window</span></li>
+        <li><span class="chip"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><path d="M7 10l5 5 5-5"/><path d="M5 20h14"/></svg></span> <span><strong>Download</strong>, on regular video files only</span></li>
+      </ul>
     </section>
 
     <section class="step">
-      <h2>🎯 Step 2: Select a Video</h2>
-      <p>
-        Click the extension icon, then click <strong>“Select a video”</strong>. Your cursor will change — click on any video to activate resizing and dragging.
-        <br /><br />
-        <strong>Heads up:</strong> If you're trying this on a tab that was open before installation, you may need to refresh the page first.
-      </p>
-      <img src="assets/select-one-2.gif" alt="Clicking on a video to make it draggable" />
+      <h2>2. Drag and resize</h2>
+      <video class="step-clip" src="assets/resize.webm" data-start="2.6" autoplay muted playsinline></video>
+      <p>Drag to move, pull any edge to resize, close to put it back. Hold <kbd>Shift</kbd> to change the shape.</p>
     </section>
 
     <section class="step">
-      <h2>📺 Optional: Select All Videos</h2>
-      <p>
-        Want to make every video on the page draggable at once? Click <strong>“Select all videos”</strong> from the extension popup.
-      </p>
-      <img src="assets/select-all-2.gif" alt="Making all videos draggable" />
+      <h2>Other ways to pop out</h2>
+      <p class="shortcut"><kbd>Alt+Shift+V</kbd> or <kbd>Option+Shift+V</kbd> on Mac</p>
+      <div class="ways-mocks">
+        <figure>
+          <div class="ctx-mock" role="img" aria-label="Right-click menu with Pop out video highlighted">
+            <div>Reload</div>
+            <div>Save as...</div>
+            <div class="ctx-sep"></div>
+            <div class="ctx-active"><img src="assets/icon-16.png" alt="" /> Pop out video</div>
+            <div class="ctx-sep"></div>
+            <div>Inspect</div>
+          </div>
+          <figcaption>Right-click a video</figcaption>
+        </figure>
+        <figure>
+          <div class="ext-mock" role="img" aria-label="Extension menu with the Pop out all videos button">
+            <div class="ext-mock-title"><img src="assets/icon-16.png" alt="" /> Draggable Video Pop Out</div>
+            <div class="ext-mock-button">Pop out all videos</div>
+            <div class="ext-mock-line"></div>
+            <div class="ext-mock-line short"></div>
+          </div>
+          <figcaption>Or use the extension menu</figcaption>
+        </figure>
+      </div>
     </section>
 
     <section class="step">
-      <h2>🛠️ Step 3: Drag & Resize</h2>
-      <p>
-        Use the top bar to drag. Resize freely using the corner handle. Playback and volume controls are built in.
-      </p>
-      <img src="assets/resize-2.gif" alt="Dragging and resizing the video" />
-  </section>
+      <h2>Pin it for quick settings</h2>
+      <div class="pin-mock" role="img" aria-label="Chrome's extensions menu with the pin button next to Draggable Video Pop Out">
+        <div class="pin-mock-title">Extensions</div>
+        <div class="pin-mock-row">
+          <img src="assets/icon-48.png" alt="" />
+          <span class="pin-mock-name">Draggable Video Pop Out: Floating Picture in Picture Player</span>
+          <span class="pin-mock-pin"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h6l-1 6 3 3v2H7v-2l3-3z"/><path d="M12 15v6"/></svg></span>
+        </div>
+      </div>
+      <p>Click the puzzle icon by your address bar, then the pin.</p>
+    </section>
   </div>
 
   <div class="note">
-    ⚠️ <strong>Note:</strong> This version doesn’t support YouTube videos. It may not work on sites that use custom video players or embed methods.
+    <strong>Good to know</strong>
+    <ul>
+      <li>If the buttons don't show on a tab that was already open, refresh it.</li>
+      <li>Download isn't available on YouTube or on sites that stream video in pieces, which includes most videos on X, Reddit and Twitch.</li>
+      <li>Some feeds delete posts you've scrolled far past. When that happens, the floating window closes with it.</li>
+    </ul>
   </div>
   <script src="js/confetti.js"></script>
+  <script src="js/guide.js"></script>
 </body>
 </html>

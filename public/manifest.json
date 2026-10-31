@@ -1,9 +1,16 @@
 {
   "manifest_version": 3,
-  "name": "Draggable Video Resizer",
-  "version": "1.3",
-  "description": "Resize and drag videos on any page.",
-  "permissions": ["activeTab", "storage"],
+  "name": "Draggable Video Pop Out: Floating Picture in Picture Player",
+  "version": "2.0",
+  "description": "Pop out any video into a floating, resizable player that stays put while you scroll, with picture in picture in one click.",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "contextMenus"
+  ],
+  "optional_permissions": [
+    "downloads"
+  ],
   "action": {
     "default_popup": "index.html",
     "default_icon": {
@@ -18,12 +25,27 @@
     "128": "assets/icon-128.png"
   },
   "background": {
-    "service_worker": "js/background.js"
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "commands": {
+    "pop-out-video": {
+      "suggested_key": {
+        "default": "Alt+Shift+V"
+      },
+      "description": "Pop out the video under the cursor, or put it back"
+    }
   },
   "content_scripts": [
     {
-      "matches": ["https://*/*", "http://*/*"],
-      "js": ["content.js"]
+      "matches": [
+        "https://*/*",
+        "http://*/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "all_frames": true
     }
   ]
 }

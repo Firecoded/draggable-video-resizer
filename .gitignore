@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+.pw-tmp
+store-assets/raw-*
+store-assets/*.webm

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Allow downloads</title>
+    </head>
+    <body>
+        <div class="permission">
+            <img src="/assets/icon-128.png" alt="" class="permission-icon" />
+            <h1>Allow downloads?</h1>
+            <p>Chrome needs your OK once before Draggable Video Pop Out can save videos to your computer.</p>
+            <div class="permission-actions">
+                <button id="cancel" class="secondary-button">Not now</button>
+                <button id="allow" class="primary-button">Allow and download</button>
+            </div>
+            <p id="error" class="permission-error" hidden></p>
+        </div>
+        <script type="module" src="/src/permission.ts"></script>
+    </body>
+</html>

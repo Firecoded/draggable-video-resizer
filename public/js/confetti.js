@@ -14,6 +14,26 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
   const installDiv = document.getElementById("install-message");
+  if (params.get("updated") === "true" && installDiv) {
+    installDiv.innerHTML = `
+      <div style="
+        background: #e6f7ff;
+        border-left: 6px solid #1890ff;
+        padding: 16px;
+        margin-bottom: 24px;
+        border-radius: 4px;
+      ">
+        <h2 style="margin: 0 0 8px">Your video extension just got a big update, and a new name</h2>
+        <p style="margin: 0 0 8px">You no longer need to open the menu and pick a video. Just hover any video and use the buttons in its top corner. Draggable Video Resizer is now Draggable Video Pop Out. New in this version:</p>
+        <ul style="margin: 0; padding-left: 20px">
+          <li>Works on YouTube and on embedded players</li>
+          <li>The floating window stays put while you scroll</li>
+          <li>Resize from any edge, with a keyboard shortcut and right-click menu</li>
+          <li>Save regular video files with a download button</li>
+        </ul>
+      </div>
+    `;
+  }
     if (isInstall && installDiv) {
       installDiv.innerHTML = `
         <div style="
@@ -23,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
           margin-bottom: 24px;
           border-radius: 4px;
         ">
-          <h2 style="margin: 0">🎉 Thanks for installing Draggable Video Resizer!</h2>
+          <h2 style="margin: 0">🎉 Thanks for installing Draggable Video Pop Out!</h2>
         </div>
       `;
     }
